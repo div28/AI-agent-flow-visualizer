@@ -1963,10 +1963,7 @@ const App = () => {
 
 // Render the app
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(React.createElement(App));20px)',
-            borderRadius: '20px',
-            padding: '32px',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
+root.render(React.createElement(App));
           }
         },
           React.createElement('div', {
