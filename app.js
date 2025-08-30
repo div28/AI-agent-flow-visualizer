@@ -978,10 +978,6 @@ const App = () => {
 // Render the app
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(React.createElement(App));
-                color: '#ef4444',
-                marginBottom: '8px'
-              }
-            }, React.createElement(AnimatedCounter, { value: 67, suffix: '%' })),
             React.createElement('div', {
               style: {
                 fontSize: '16px',
