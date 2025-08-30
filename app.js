@@ -977,9 +977,7 @@ const App = () => {
 
 // Render the app
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(React.createElement(App)); {
-                fontSize: '36px',
-                fontWeight: '800',
+root.render(React.createElement(App));
                 color: '#ef4444',
                 marginBottom: '8px'
               }
