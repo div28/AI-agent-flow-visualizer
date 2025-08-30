@@ -257,19 +257,6 @@ const enterpriseScenarios = {
         reasoning: 'MISSING INTEGRATION: Agent workflow lacks VIP tier evaluation step',
         what_should_have_happened: 'IF guest_tier >= VIP THEN escalate_to_specialist + offer_full_refund + retention_incentives',
         business_impact: 'VIP guest (47K LTV) received standard treatment instead of white-glove service'
-      },
-      {
-        step: 4,
-        title: 'Automatic Processing',
-        description: 'Agent completes cancellation without escalation',
-        tool: 'fulfillment_engine',
-        input: 'refund_amount: $4,250, escalation_required: false',
-        decision: 'COMPLETE - Process standard refund',
-        output: '❌ VIP guest churned due to poor experience',
-        status: 'failure',
-        duration: '200ms',
-        confidence: '0%',
-        reasoning: 'Completed standard process without recognizing high-value guest'
       }
     ],
     root_cause: 'Missing guest tier integration in cancellation workflow decision tree',
@@ -319,30 +306,6 @@ const competitorData = {
 };
 
 // Animated components
-const AnimatedCounter = ({ value, duration = 2000, prefix = '', suffix = '' }) => {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    let startValue = 0;
-    const endValue = parseInt(value.toString().replace(/,/g, ''));
-    const increment = endValue / (duration / 16);
-
-    const timer = setInterval(() => {
-      startValue += increment;
-      if (startValue >= endValue) {
-        setCount(endValue);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(startValue));
-      }
-    }, 16);
-
-    return () => clearInterval(timer);
-  }, [value, duration]);
-
-  return React.createElement('span', null, `${prefix}${count.toLocaleString()}${suffix}`);
-};
-
 const PulsingDot = ({ color = '#ef4444', size = '12px' }) => {
   return React.createElement('div', {
     style: {
@@ -406,22 +369,6 @@ const LandingPage = ({ onSelectScenario }) => {
       overflow: 'hidden'
     }
   },
-    // Animated background particles
-    React.createElement('div', {
-      style: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: `
-          url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat,
-          linear-gradient(90deg, transparent 0%, rgba(59, 130, 246, 0.05) 50%, transparent 100%)
-        `,
-        animation: 'slide 20s linear infinite'
-      }
-    }),
-
     React.createElement('div', {
       style: {
         position: 'relative',
@@ -556,18 +503,6 @@ const LandingPage = ({ onSelectScenario }) => {
         }
       },
         React.createElement('div', {
-          style: {
-            position: 'absolute',
-            top: '-50%',
-            right: '-50%',
-            width: '200%',
-            height: '200%',
-            background: 'radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%)',
-            animation: 'rotate 20s linear infinite'
-          }
-        }),
-
-        React.createElement('div', {
           style: { position: 'relative', zIndex: 10, textAlign: 'center' }
         },
           React.createElement('h2', {
@@ -696,7 +631,7 @@ const LandingPage = ({ onSelectScenario }) => {
       React.createElement('div', {
         style: {
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: '24px',
           marginBottom: '80px'
         }
@@ -709,15 +644,15 @@ const LandingPage = ({ onSelectScenario }) => {
               backdropFilter: 'blur(20px)',
               border: `2px solid ${scenario.color}30`,
               borderRadius: '20px',
-              padding: '32px',
+              padding: '24px',
               cursor: 'pointer',
               transition: 'all 0.4s ease',
               position: 'relative',
               overflow: 'hidden'
             },
             onMouseEnter: (e) => {
-              e.target.style.transform = 'translateY(-12px) scale(1.02)';
-              e.target.style.boxShadow = `0 25px 50px ${scenario.color}40`;
+              e.target.style.transform = 'translateY(-8px) scale(1.02)';
+              e.target.style.boxShadow = `0 15px 30px ${scenario.color}40`;
             },
             onMouseLeave: (e) => {
               e.target.style.transform = 'translateY(0) scale(1)';
@@ -726,18 +661,6 @@ const LandingPage = ({ onSelectScenario }) => {
             onClick: () => onSelectScenario(key)
           },
             React.createElement('div', {
-              style: {
-                position: 'absolute',
-                top: '-50%',
-                right: '-50%',
-                width: '200%',
-                height: '200%',
-                background: `radial-gradient(circle, ${scenario.color}10 0%, transparent 70%)`,
-                animation: 'rotate 15s linear infinite'
-              }
-            }),
-
-            React.createElement('div', {
               style: { position: 'relative', zIndex: 10 }
             },
               React.createElement('div', {
@@ -745,16 +668,16 @@ const LandingPage = ({ onSelectScenario }) => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '12px',
-                  marginBottom: '20px'
+                  marginBottom: '16px'
                 }
               },
                 React.createElement('div', {
-                  style: { fontSize: '40px' }
+                  style: { fontSize: '32px' }
                 }, scenario.logo),
                 React.createElement('h3', {
                   style: {
                     color: 'white',
-                    fontSize: '24px',
+                    fontSize: '20px',
                     fontWeight: '700',
                     margin: 0
                   }
@@ -764,7 +687,7 @@ const LandingPage = ({ onSelectScenario }) => {
               React.createElement('h4', {
                 style: {
                   color: 'white',
-                  fontSize: '18px',
+                  fontSize: '16px',
                   fontWeight: '600',
                   marginBottom: '12px',
                   lineHeight: '1.3'
@@ -774,9 +697,9 @@ const LandingPage = ({ onSelectScenario }) => {
               React.createElement('p', {
                 style: {
                   color: '#94a3b8',
-                  fontSize: '15px',
-                  lineHeight: '1.5',
-                  marginBottom: '20px'
+                  fontSize: '14px',
+                  lineHeight: '1.4',
+                  marginBottom: '16px'
                 }
               }, scenario.problem),
 
@@ -784,8 +707,8 @@ const LandingPage = ({ onSelectScenario }) => {
                 style: {
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr',
-                  gap: '16px',
-                  marginBottom: '24px'
+                  gap: '12px',
+                  marginBottom: '16px'
                 }
               },
                 React.createElement('div', {
@@ -794,8 +717,8 @@ const LandingPage = ({ onSelectScenario }) => {
                   React.createElement('div', {
                     style: {
                       color: '#ef4444',
-                      fontSize: '24px',
-                      fontWeight: '800'
+                      fontSize: '18px',
+                      fontWeight: '700'
                     }
                   }, scenario.impact.revenue_loss ? `$${(scenario.impact.revenue_loss / 1000).toFixed(0)}K` : 
                        scenario.impact.guest_lifetime_value_lost ? `$${(scenario.impact.guest_lifetime_value_lost / 1000).toFixed(0)}K` : 
@@ -803,8 +726,8 @@ const LandingPage = ({ onSelectScenario }) => {
                   React.createElement('div', {
                     style: {
                       color: '#fca5a5',
-                      fontSize: '12px',
-                      fontWeight: '600'
+                      fontSize: '11px',
+                      fontWeight: '500'
                     }
                   }, 'Impact')
                 ),
@@ -814,15 +737,15 @@ const LandingPage = ({ onSelectScenario }) => {
                   React.createElement('div', {
                     style: {
                       color: scenario.color,
-                      fontSize: '24px',
-                      fontWeight: '800'
+                      fontSize: '18px',
+                      fontWeight: '700'
                     }
                   }, scenario.agent_flow.length),
                   React.createElement('div', {
                     style: {
                       color: '#94a3b8',
-                      fontSize: '12px',
-                      fontWeight: '600'
+                      fontSize: '11px',
+                      fontWeight: '500'
                     }
                   }, 'Agent Steps')
                 )
@@ -832,7 +755,7 @@ const LandingPage = ({ onSelectScenario }) => {
                 style: {
                   background: `${scenario.color}20`,
                   borderRadius: '12px',
-                  padding: '16px',
+                  padding: '12px',
                   textAlign: 'center',
                   border: `1px solid ${scenario.color}40`
                 }
@@ -841,16 +764,9 @@ const LandingPage = ({ onSelectScenario }) => {
                   style: {
                     color: 'white',
                     fontSize: '14px',
-                    fontWeight: '600',
-                    marginBottom: '8px'
+                    fontWeight: '600'
                   }
-                }, '🎯 Click to Debug'),
-                React.createElement('div', {
-                  style: {
-                    color: '#94a3b8',
-                    fontSize: '12px'
-                  }
-                }, 'See step-by-step failure analysis →')
+                }, '🎯 Click to Debug →')
               )
             )
           )
@@ -864,8 +780,7 @@ const LandingPage = ({ onSelectScenario }) => {
           backdropFilter: 'blur(20px)',
           border: '1px solid rgba(255, 255, 255, 0.1)',
           borderRadius: '24px',
-          padding: '48px',
-          marginBottom: '60px'
+          padding: '48px'
         }
       },
         React.createElement('h2', {
@@ -904,7 +819,7 @@ const LandingPage = ({ onSelectScenario }) => {
               React.createElement('h3', {
                 style: {
                   color: 'white',
-                  fontSize: '18px',
+                  fontSize: '16px',
                   fontWeight: '700',
                   marginBottom: '16px'
                 }
@@ -937,7 +852,7 @@ const LandingPage = ({ onSelectScenario }) => {
               React.createElement('div', {
                 style: { fontSize: '12px', color: '#94a3b8' }
               },
-                ['Decision Flow Viz', 'Business Impact', 'Multi-Agent Debug', 'Root Cause AI'].map((feature, idx) =>
+                ['Decision Flow', 'Business Impact', 'Multi-Agent', 'Root Cause'].map((feature, idx) =>
                   React.createElement('div', {
                     key: idx,
                     style: {
@@ -989,16 +904,6 @@ const LandingPage = ({ onSelectScenario }) => {
       @keyframes pulse {
         0%, 100% { opacity: 1; transform: scale(1); }
         50% { opacity: 0.8; transform: scale(1.1); }
-      }
-      
-      @keyframes rotate {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-      
-      @keyframes slide {
-        from { transform: translateX(-100px); }
-        to { transform: translateX(100px); }
       }
     `)
   );
@@ -1128,11 +1033,9 @@ const GuidedDemo = ({ scenario, onComplete }) => {
           },
           onMouseEnter: (e) => {
             e.target.style.transform = 'scale(1.05)';
-            e.target.style.boxShadow = `0 12px 35px ${scenario.color}60`;
           },
           onMouseLeave: (e) => {
             e.target.style.transform = 'scale(1)';
-            e.target.style.boxShadow = `0 8px 25px ${scenario.color}40`;
           },
           onClick: startDemo
         }, '▶️ Start Guided Analysis')
@@ -1270,34 +1173,14 @@ const GuidedDemo = ({ scenario, onComplete }) => {
                   }, step.step),
 
                   React.createElement('div', { style: { flex: 1 } },
-                    React.createElement('div', {
+                    React.createElement('h3', {
                       style: {
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '12px'
+                        color: 'white',
+                        fontSize: '20px',
+                        fontWeight: '600',
+                        margin: '0 0 8px 0'
                       }
-                    },
-                      React.createElement('h3', {
-                        style: {
-                          color: 'white',
-                          fontSize: '20px',
-                          fontWeight: '600',
-                          margin: 0
-                        }
-                      }, step.title),
-                      currentStep >= index && React.createElement('div', {
-                        style: {
-                          background: step.status === 'failure' ? '#ef4444' :
-                                     step.status === 'success' ? '#10b981' : '#f59e0b',
-                          color: 'white',
-                          padding: '4px 12px',
-                          borderRadius: '12px',
-                          fontSize: '12px',
-                          fontWeight: '600'
-                        }
-                      }, step.status.toUpperCase())
-                    ),
+                    }, step.title),
 
                     React.createElement('p', {
                       style: {
@@ -1450,7 +1333,7 @@ const GuidedDemo = ({ scenario, onComplete }) => {
             React.createElement('div', {
               style: { display: 'grid', gap: '16px' }
             },
-              Object.entries(scenario.impact).map(([key, value]) =>
+              Object.entries(scenario.impact).slice(0, 3).map(([key, value]) =>
                 React.createElement('div', {
                   key: key,
                   style: {
@@ -1463,8 +1346,8 @@ const GuidedDemo = ({ scenario, onComplete }) => {
                   React.createElement('div', {
                     style: {
                       color: '#ef4444',
-                      fontSize: '24px',
-                      fontWeight: '800',
+                      fontSize: '20px',
+                      fontWeight: '700',
                       marginBottom: '4px'
                     }
                   }, typeof value === 'number' ? 
@@ -1473,7 +1356,7 @@ const GuidedDemo = ({ scenario, onComplete }) => {
                   React.createElement('div', {
                     style: {
                       color: '#fca5a5',
-                      fontSize: '11px',
+                      fontSize: '10px',
                       fontWeight: '600',
                       textTransform: 'uppercase'
                     }
@@ -1528,8 +1411,8 @@ const GuidedDemo = ({ scenario, onComplete }) => {
               React.createElement('span', {
                 style: {
                   color: '#10b981',
-                  fontSize: '20px',
-                  fontWeight: '800'
+                  fontSize: '16px',
+                  fontWeight: '700'
                 }
               }, scenario.prevention_confidence)
             )
@@ -1552,20 +1435,6 @@ const ResultsPage = ({ scenario, onBackToHome }) => {
       overflow: 'hidden'
     }
   },
-    React.createElement('div', {
-      style: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: `
-          radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-          radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 50%)
-        `
-      }
-    }),
-
     React.createElement('div', {
       style: {
         position: 'relative',
@@ -1597,194 +1466,7 @@ const ResultsPage = ({ scenario, onBackToHome }) => {
           maxWidth: '800px',
           margin: '0 auto 48px auto'
         }
-      }, `You've seen how our AI Agent Flow Visualizer identified the exact failure point in ${scenario.company}'s system and provided an actionable fix with ${scenario.prevention_confidence} confidence. This is what "debugging AI agents" really means.`),
-
-      React.createElement('div', {
-        style: {
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '32px',
-          marginBottom: '64px'
-        }
-      },
-        React.createElement('div', {
-          style: {
-            background: 'rgba(255, 255, 255, 0.15)',
-            backdropFilter: 'blur(20px)',
-            borderRadius: '20px',
-            padding: '32px',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
-          }
-        },
-          React.createElement('div', {
-            style: { fontSize: '40px', marginBottom: '16px' }
-          }, '💰'),
-          React.createElement('h3', {
-            style: {
-              color: 'white',
-              fontSize: '20px',
-              fontWeight: '700',
-              marginBottom: '12px'
-            }
-          }, 'Future Losses Prevented'),
-          React.createElement('p', {
-            style: {
-              color: 'rgba(255, 255, 255, 0.8)',
-              fontSize: '14px',
-              lineHeight: '1.5'
-            }
-          }, `Implementing our fix prevents ${scenario.impact.revenue_loss?.toLocaleString() || scenario.impact.guest_lifetime_value_lost?.toLocaleString() || '50,000'} in future similar failures`)
-        ),
-
-        React.createElement('div', {
-          style: {
-            background: 'rgba(255, 255, 255, 0.15)',
-            backdropFilter: 'blur(20px)',
-            borderRadius: '20px',
-            padding: '32px',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
-          }
-        },
-          React.createElement('div', {
-            style: { fontSize: '40px', marginBottom: '16px' }
-          }, '🤖'),
-          React.createElement('h3', {
-            style: {
-              color: 'white',
-              fontSize: '20px',
-              fontWeight: '700',
-              marginBottom: '12px'
-            }
-          }, 'AI-Validated Solution'),
-          React.createElement('p', {
-            style: {
-              color: 'rgba(255, 255, 255, 0.8)',
-              fontSize: '14px',
-              lineHeight: '1.5'
-            }
-          }, `${scenario.prevention_confidence} confidence in fix effectiveness based on similar patterns`)
-        )
-      ),
-
-      React.createElement('div', {
-        style: {
-          background: 'rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(20px)',
-          borderRadius: '24px',
-          padding: '48px',
-          marginBottom: '48px',
-          border: '2px solid rgba(255, 255, 255, 0.2)'
-        }
-      },
-        React.createElement('h2', {
-          style: {
-            color: 'white',
-            fontSize: 'clamp(24px, 5vw, 32px)',
-            fontWeight: '700',
-            marginBottom: '32px'
-          }
-        }, '🚀 What Makes This Revolutionary'),
-
-        React.createElement('div', {
-          style: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '32px',
-            textAlign: 'left'
-          }
-        },
-          React.createElement('div', null,
-            React.createElement('h3', {
-              style: {
-                color: 'white',
-                fontSize: '18px',
-                fontWeight: '600',
-                marginBottom: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }
-            },
-              React.createElement('span', null, '❌'),
-              'Traditional Tools'
-            ),
-            React.createElement('ul', {
-              style: {
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontSize: '14px',
-                lineHeight: '1.6',
-                paddingLeft: '20px',
-                margin: 0
-              }
-            },
-              React.createElement('li', null, 'Show response times (2.3s)'),
-              React.createElement('li', null, 'Show error rates (12%)'),
-              React.createElement('li', null, 'Show agent calls (47)'),
-              React.createElement('li', null, 'Status: Failed ❌'),
-              React.createElement('li', { style: { fontWeight: '600', color: '#fca5a5' } }, 'No insight into WHY it failed')
-            )
-          ),
-
-          React.createElement('div', null,
-            React.createElement('h3', {
-              style: {
-                color: 'white',
-                fontSize: '18px',
-                fontWeight: '600',
-                marginBottom: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }
-            },
-              React.createElement('span', null, '✅'),
-              'Our Platform'
-            ),
-            React.createElement('ul', {
-              style: {
-                color: 'rgba(255, 255, 255, 0.9)',
-                fontSize: '14px',
-                lineHeight: '1.6',
-                paddingLeft: '20px',
-                margin: 0
-              }
-            },
-              React.createElement('li', null, 'Agent skipped integration tests'),
-              React.createElement('li', null, 'Missing conditional logic identified'),
-              React.createElement('li', null, 'Decision tree gap located'),
-              React.createElement('li', null, 'Fix: Add IF database_change THEN test'),
-              React.createElement('li', { style: { fontWeight: '700', color: '#ffffff' } }, `${scenario.prevention_confidence} confidence in prevention`)
-            )
-          )
-        ),
-
-        React.createElement('div', {
-          style: {
-            marginTop: '32px',
-            padding: '24px',
-            background: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: '16px',
-            textAlign: 'center'
-          }
-        },
-          React.createElement('h3', {
-            style: {
-              color: 'white',
-              fontSize: '20px',
-              fontWeight: '700',
-              marginBottom: '8px'
-            }
-          }, '⚡ The Bottom Line'),
-          React.createElement('p', {
-            style: {
-              color: 'rgba(255, 255, 255, 0.9)',
-              fontSize: '16px',
-              margin: 0,
-              fontWeight: '500'
-            }
-          }, 'We turn 14-hour debugging marathons into 2-minute root cause discoveries')
-        )
-      ),
+      }, `You've seen how our AI Agent Flow Visualizer identified the exact failure point in ${scenario.company}'s system and provided an actionable fix with ${scenario.prevention_confidence} confidence.`),
 
       React.createElement('div', {
         style: {
@@ -1805,24 +1487,19 @@ const ResultsPage = ({ scenario, onBackToHome }) => {
             fontSize: '16px',
             fontWeight: '600',
             cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            textDecoration: 'none',
-            display: 'inline-block'
+            transition: 'all 0.3s ease'
           },
           onMouseEnter: (e) => {
-            e.target.style.background = 'rgba(255, 255, 255, 0.3)';
             e.target.style.transform = 'scale(1.05)';
           },
           onMouseLeave: (e) => {
-            e.target.style.background = 'rgba(255, 255, 255, 0.2)';
             e.target.style.transform = 'scale(1)';
           },
           onClick: onBackToHome
         }, '← Try Another Company'),
 
         React.createElement('a', {
-          href: 'https://linkedin.com/in/yourname',
-          target: '_blank',
+          href: 'mailto:your.email@example.com',
           style: {
             padding: '18px 36px',
             background: 'linear-gradient(45deg, #ffffff, #f8fafc)',
@@ -1834,16 +1511,13 @@ const ResultsPage = ({ scenario, onBackToHome }) => {
             cursor: 'pointer',
             transition: 'all 0.3s ease',
             textDecoration: 'none',
-            display: 'inline-block',
-            boxShadow: '0 8px 25px rgba(255, 255, 255, 0.3)'
+            display: 'inline-block'
           },
           onMouseEnter: (e) => {
             e.target.style.transform = 'scale(1.05)';
-            e.target.style.boxShadow = '0 12px 35px rgba(255, 255, 255, 0.4)';
           },
           onMouseLeave: (e) => {
             e.target.style.transform = 'scale(1)';
-            e.target.style.boxShadow = '0 8px 25px rgba(255, 255, 255, 0.3)';
           }
         }, '🚀 Schedule Enterprise Demo')
       )
@@ -1878,10 +1552,6 @@ const App = () => {
           grid-template-columns: 1fr !important;
           gap: 24px !important;
         }
-        
-        .competitive-grid {
-          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
-        }
       }
       
       @media (max-width: 768px) {
@@ -1889,34 +1559,6 @@ const App = () => {
           grid-template-columns: 1fr !important;
           gap: 20px !important;
         }
-        
-        .results-grid {
-          grid-template-columns: 1fr !important;
-          gap: 20px !important;
-        }
-        
-        h1 {
-          font-size: clamp(32px, 8vw, 48px) !important;
-        }
-      }
-      
-      /* Custom scrollbar */
-      ::-webkit-scrollbar {
-        width: 10px;
-      }
-      
-      ::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 5px;
-      }
-      
-      ::-webkit-scrollbar-thumb {
-        background: linear-gradient(45deg, #3b82f6, #8b5cf6);
-        border-radius: 5px;
-      }
-      
-      ::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(45deg, #2563eb, #7c3aed);
       }
     `;
     document.head.appendChild(style);
@@ -1964,29 +1606,3 @@ const App = () => {
 // Render the app
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(React.createElement(App));
-          }
-        },
-          React.createElement('div', {
-            style: { fontSize: '40px', marginBottom: '16px' }
-          }, '🎯'),
-          React.createElement('h3', {
-            style: {
-              color: 'white',
-              fontSize: '20px',
-              fontWeight: '700',
-              marginBottom: '12px'
-            }
-          }, 'Root Cause Found'),
-          React.createElement('p', {
-            style: {
-              color: 'rgba(255, 255, 255, 0.8)',
-              fontSize: '14px',
-              lineHeight: '1.5'
-            }
-          }, 'Identified exact decision logic failure that caused the incident')
-        ),
-
-        React.createElement('div', {
-          style: {
-            background: 'rgba(255, 255, 255, 0.15)',
-            backdropFilter: 'blur(
